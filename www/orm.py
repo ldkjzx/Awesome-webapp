@@ -263,7 +263,14 @@ class Model(dict, metaclass=ModelMetaclass):
 			sql.append('orderBy')
 			sql.append(orderBy)
 
-
+		# 定义限制参数limit
+		limit = kw.get('limit', None)
+		if limit is not None:
+			sql.append('limit')
+			# 如果limit是整数，SQL后面直接添加'?'
+			if isinstance(limit, int):
+				sql.append('?')
+				args.append(limit)
 
 
 		rs = await select("%s where '%s'=?" % (cls.__select__, cls.__primary_key__), )
